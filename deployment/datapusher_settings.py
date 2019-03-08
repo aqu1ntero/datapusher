@@ -7,6 +7,7 @@ USERNAME = str(uuid.uuid4())
 PASSWORD = str(uuid.uuid4())
 
 NAME = 'datapusher'
+SSL_VERIFY = False
 
 # database
 

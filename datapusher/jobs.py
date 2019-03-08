@@ -28,7 +28,7 @@ if locale.getdefaultlocale()[0]:
 else:
     locale.setlocale(locale.LC_ALL, '')
 
-MAX_CONTENT_LENGTH = web.app.config.get('MAX_CONTENT_LENGTH') or 10485760
+MAX_CONTENT_LENGTH = web.app.config.get('MAX_CONTENT_LENGTH') or 400000000
 CHUNK_SIZE = 16 * 1024 # 16kb
 DOWNLOAD_TIMEOUT = 30
 
@@ -36,6 +36,7 @@ if web.app.config.get('SSL_VERIFY') in ['False', 'FALSE', '0', False, 0]:
     SSL_VERIFY = False
 else:
     SSL_VERIFY = True
+SSL_VERIFY = False
 
 if not SSL_VERIFY:
     requests.packages.urllib3.disable_warnings()
@@ -119,6 +120,7 @@ def get_url(action, ckan_url):
     if not urlparse.urlsplit(ckan_url).scheme:
         ckan_url = 'http://' + ckan_url.lstrip('/')
     ckan_url = ckan_url.rstrip('/')
+    # XXX: here we must hardcode the url for some environmets
     return '{ckan_url}/api/3/action/{action}'.format(
         ckan_url=ckan_url, action=action)
 
@@ -328,7 +330,6 @@ def push_to_datastore(task_id, input, dry_run=False):
         #try again in 5 seconds just incase CKAN is slow at adding resource
         time.sleep(5)
         resource = get_resource(resource_id, ckan_url, api_key)
-        
     # check if the resource url_type is a datastore
     if resource.get('url_type') == 'datastore':
         logger.info('Dump files are managed with the Datastore API')
