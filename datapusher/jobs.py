@@ -402,13 +402,13 @@ def push_to_datastore(task_id, input, dry_run=False):
     resource['hash'] = file_hash
 
     try:
-        table_set = messytables.any_tableset(tmp, mimetype=ct, extension=ct)
+        table_set = messytables.any_tableset(tmp, mimetype=ct, extension=ct, auto_detect=True)
     except messytables.ReadError as e:
         ## try again with format
         tmp.seek(0)
         try:
             format = resource.get('format')
-            table_set = messytables.any_tableset(tmp, mimetype=format, extension=format)
+            table_set = messytables.any_tableset(tmp, mimetype=format, extension=format, auto_detect=True)
         except:
             raise util.JobError(e)
 
