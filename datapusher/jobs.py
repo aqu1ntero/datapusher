@@ -412,7 +412,7 @@ def push_to_datastore(task_id, input, dry_run=False):
         except:
             raise util.JobError(e)
 
-    row_set = table_set.tables.pop()
+    row_set = table_set.tables.pop(0)
     offset, headers = messytables.headers_guess(row_set.sample)
 
     existing = datastore_resource_exists(resource_id, api_key, ckan_url)
