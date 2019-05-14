@@ -7,6 +7,14 @@ USERNAME = str(uuid.uuid4())
 PASSWORD = str(uuid.uuid4())
 
 NAME = 'datapusher'
+SSL_VERIFY = False
+
+
+def first_table_set(table_set):
+    return table_set.tables.pop(0)
+
+
+GET_ROW_SET = first_table_set
 
 # database
 
