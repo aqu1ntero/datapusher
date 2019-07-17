@@ -7,6 +7,7 @@ USERNAME = str(uuid.uuid4())
 PASSWORD = str(uuid.uuid4())
 
 NAME = 'datapusher'
+CKAN_URL = 'http://localhost:5000'
 SSL_VERIFY = False
 
 

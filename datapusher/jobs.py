@@ -14,6 +14,7 @@ import decimal
 import hashlib
 import time
 import tempfile
+import regex
 
 import messytables
 from slugify import slugify
@@ -120,7 +121,8 @@ def get_url(action, ckan_url):
     if not urlparse.urlsplit(ckan_url).scheme:
         ckan_url = 'http://' + ckan_url.lstrip('/')
     ckan_url = ckan_url.rstrip('/')
-    # XXX: here we must hardcode the url for some environmets
+    # we must override the url in settings for some environmets
+    ckan_url = web.app.config.get('CKAN_URL', ckan_url)
     return '{ckan_url}/api/3/action/{action}'.format(
         ckan_url=ckan_url, action=action)
 
@@ -330,7 +332,7 @@ def push_to_datastore(task_id, input, dry_run=False):
         #try again in 5 seconds just incase CKAN is slow at adding resource
         time.sleep(5)
         resource = get_resource(resource_id, ckan_url, api_key)
-        
+
     # check if the resource url_type is a datastore
     if resource.get('url_type') == 'datastore':
         logger.info('Dump files are managed with the Datastore API')
@@ -338,6 +340,10 @@ def push_to_datastore(task_id, input, dry_run=False):
 
     # check scheme
     url = resource.get('url')
+    # hardcoded https to http fallback if test or prod
+    url = regex.sub(
+        r'^https://(test.)?catalogodatos.gub.uy/',
+        r'http://\1catalogodatos.gub.uy/', url)
     scheme = urlparse.urlsplit(url).scheme
     if scheme not in ('http', 'https', 'ftp'):
         raise util.JobError(
