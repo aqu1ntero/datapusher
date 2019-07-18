@@ -5,4 +5,3 @@ messytables==0.15.2
 python-slugify==1.2.1
 certifi
 requests[security]==2.13.0
-regex

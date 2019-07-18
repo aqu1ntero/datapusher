@@ -14,7 +14,6 @@ import decimal
 import hashlib
 import time
 import tempfile
-import regex
 
 import messytables
 from slugify import slugify
@@ -340,10 +339,6 @@ def push_to_datastore(task_id, input, dry_run=False):
 
     # check scheme
     url = resource.get('url')
-    # hardcoded https to http fallback if test or prod
-    url = regex.sub(
-        r'^https://(test.)?catalogodatos.gub.uy/',
-        r'http://\1catalogodatos.gub.uy/', url)
     scheme = urlparse.urlsplit(url).scheme
     if scheme not in ('http', 'https', 'ftp'):
         raise util.JobError(
