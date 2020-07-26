@@ -438,7 +438,7 @@ def push_to_datastore(task_id, input, dry_run=False):
             for f in existing.get('fields', []) if 'info' in f)
 
     # Some headers might have been converted from strings to floats and such.
-    headers = [str(header) for header in headers]
+    headers = [header for header in headers]
 
     row_set.register_processor(messytables.headers_processor(headers))
     row_set.register_processor(messytables.offset_processor(offset + 1))
