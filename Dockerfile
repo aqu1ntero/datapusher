@@ -18,4 +18,3 @@ EXPOSE 8800
 
 CMD /usr/local/bin/uwsgi -i $WSGI_CONFIG
 # CMD [ "python", "datapusher/main.py", "deployment/datapusher_settings.py" ]
-
