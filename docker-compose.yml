@@ -1,0 +1,16 @@
+# docker-compose build && docker-compose up -d
+version: "3"
+
+services:
+  datapusher:
+    container_name: datapusher
+    env_file:
+      - '.env'
+    build: .
+    ports:
+      - "8800:8800"
+    environment:
+      LC_ALL: C
+      SSL_VERIFY: 0
+    extra_hosts:
+      - "ckan-dev:${CKAN_DEV_IP}"
