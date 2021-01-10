@@ -436,8 +436,14 @@ def push_to_datastore(task_id, input, dry_run=False):
             for f in existing.get('fields', []) if 'info' in f)
 
     # Some headers might have been converted from strings to floats and such.
-    headers = [str(header) for header in headers]
-
+    # Unicode problem
+    h = []
+    for header in headers:
+        if isinstance(header, bytes):
+            h.append(header.encode('utf-8'))
+        else:
+            h.append(header)
+    headers = h
     row_set.register_processor(messytables.headers_processor(headers))
     row_set.register_processor(messytables.offset_processor(offset + 1))
     types = messytables.type_guess(row_set.sample, types=TYPES, strict=True)
