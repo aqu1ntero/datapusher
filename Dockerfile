@@ -13,7 +13,7 @@ RUN chmod -R u+x ${SOURCE_DIR} && \
     chgrp -R 0 ${SOURCE_DIR} && \
     chmod -R g=u ${SOURCE_DIR} /etc/passwd
 
-RUN apt update && apt install -y gcc make g++ libpcre3 libpcre3-dev vim && apt clean
+RUN apt update && apt install -y gcc make g++ libpcre3 libpcre3-dev vim curl && apt clean
 RUN pip install -r requirements.txt
 RUN pip install uwsgi==2.0.19.1
 RUN python setup.py install
