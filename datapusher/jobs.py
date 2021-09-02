@@ -5,8 +5,10 @@ import json
 import requests
 try:
     from urllib.parse import urlsplit
+    from urllib.parse import urlunsplit
 except ImportError:
     from urlparse import urlsplit
+    from urlparse import urlunsplit
 
 import itertools
 import datetime
@@ -365,7 +367,7 @@ def push_to_datastore(task_id, input, dry_run=False):
         usckan = urlsplit(ckan_url)
         if 'te-apps.paas.red.uy' in usres.netloc:
             logger.info('Downloading resource from internal url')
-            url = urlsplit(
+            url = urlunsplit(
                 usres.scheme.replace('https', usckan.scheme),
                 usckan.netloc, usres.path, usres.query, usres.fragment)
             logger.info('Fetching from: {0}'.format(url))
