@@ -333,6 +333,7 @@ def push_to_datastore(task_id, input, dry_run=False):
     api_key = input.get('api_key')
 
     try:
+        logger.info('Getting resource {0} from {1}'.format(resource_id, ckan_url))
         resource = get_resource(resource_id, ckan_url, api_key)
     except util.JobError as e:
         # try again in 5 seconds just incase CKAN is slow at adding resource
@@ -360,6 +361,14 @@ def push_to_datastore(task_id, input, dry_run=False):
         # otherwise we won't get file from private resources
         headers['Authorization'] = api_key
     try:
+        usres = urlsplit(url)
+        usckan = urlsplit(ckan_url)
+        if 'te-apps.paas.red.uy' in usres.netloc:
+            logger.info('Downloading resource from internal url')
+            url = urlsplit(
+                usres.scheme.replace('https', usckan.scheme),
+                usckan.netloc, usres.path, usres.query, usres.fragment)
+            logger.info('Fetching from: {0}'.format(url))
         response = requests.get(
             url,
             headers=headers,
